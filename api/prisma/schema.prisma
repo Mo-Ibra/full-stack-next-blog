@@ -11,23 +11,24 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   name       String
-  email      String   @unique
+  email      String    @unique
   password   String
-  isAdmin    Boolean  @default(false)
-  token      String?  @db.Text
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  isAdmin    Boolean   @default(false)
+  token      String?   @db.Text
+  articles   Article[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
 }
 
 model Category {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
-  description String   @db.MediumText
-  articles Article[]
-  created_at  DateTime @default(now())
-  updated_at  DateTime @default(now())
+  description String    @db.MediumText
+  articles    Article[]
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now())
 }
 
 model Article {
@@ -36,8 +37,10 @@ model Article {
   title       String
   description String   @db.MediumText
   content     String   @db.Text
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
 }

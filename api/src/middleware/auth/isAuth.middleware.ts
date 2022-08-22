@@ -36,6 +36,7 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
             return res.status(500).json({ error: 'Invalid Token' });
         }
 
+        req.id = decode.id;
         req.name = decode.name;
         req.email = decode.email;
         req.isAdmin = decode.isAdmin;

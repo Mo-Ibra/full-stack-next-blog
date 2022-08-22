@@ -6,5 +6,5 @@ export const articleSchema = Joi.object({
     title: Joi.string().min(8).max(58).required(), // min(54) max(58) SEO.
     description: Joi.string().min(8).max(64).required(),
     content: Joi.string().min(8).required(),
-    categoryId: Joi.number().required(),
+    categoryId: Joi.number().required()
 });

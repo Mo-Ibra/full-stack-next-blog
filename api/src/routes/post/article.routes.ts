@@ -9,7 +9,7 @@ import express, { Request, Response } from 'express';
 
 import { PrismaClient } from '@prisma/client';
 
-import isAdmin from '../../middleware/auth/isAdmin.middleware';
+import isAuth from '../../middleware/auth/isAuth.middleware';
 
 import { createValidator } from 'express-joi-validation';
 
@@ -49,7 +49,7 @@ Router.get('/:id', async (req: Request, res: Response) => {
         });
 
         if (!article) {
-            res.status(404).json({ status: 404, messaeg: "Article Not Found!" })
+            return res.status(404).json({ status: 404, messaeg: "Article Not Found!" })
         }
 
         res.status(200).json({ status: 200, article });
@@ -62,11 +62,11 @@ Router.get('/:id', async (req: Request, res: Response) => {
 /**
  * Create New Article
  * 
- * @access Admin.
+ * @access User(Auth).
 */
-Router.post('/', [isAdmin, JoiMiddleWareValidator.body(articleSchema)], async (req: Request, res: Response) => {
+Router.post('/', [isAuth, JoiMiddleWareValidator.body(articleSchema)], async (req: Request, res: Response) => {
 
-    const { slug, title, description, content, categoryId }  = req.body;
+    const { slug, title, description, content, categoryId } = req.body;
 
     try {
 
@@ -77,6 +77,7 @@ Router.post('/', [isAdmin, JoiMiddleWareValidator.body(articleSchema)], async (r
                 description,
                 content,
                 categoryId: Number(categoryId),
+                authorId: Number(req.id),
             }
         });
 
@@ -85,6 +86,63 @@ Router.post('/', [isAdmin, JoiMiddleWareValidator.body(articleSchema)], async (r
     } catch (err) {
         res.status(500).json(err);
     }
+
+});
+
+/**
+ * Update Article
+ * 
+ * @access User(Auth - Same)
+*/
+Router.put('/:id', [isAuth, JoiMiddleWareValidator.body(articleSchema)], async (req: Request, res: Response) => {
+
+    const id: number = Number(req.params.id);
+
+    const { slug, title, description, content, categoryId } = req.body;
+
+    try {
+
+        const getArticle = await prisma.article.findUnique({
+            where: {
+                id,
+            }
+        });
+
+        if (!getArticle) {
+            return res.status(404).json({ status: 404, message: "Article not found!" });
+        }
+
+        if (getArticle.authorId !== req.id) {
+            return res.status(403).json({ message: "You can't update this article." });
+        }
+
+        const updatedArticle = await prisma.article.update({
+            where: {
+                id,
+            },
+            data: {
+                slug,
+                title,
+                description,
+                content,
+                categoryId,
+            }
+        });
+
+        res.status(200).json({ status: 200, message: "Article has been updated", article: updatedArticle });
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+/**
+ * Delete Article
+ * 
+ * @access User(Auth - Same)
+*/
+
+Router.delete('/', (req: Request, res: Response) => {
 
 });
 
