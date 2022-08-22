@@ -1,10 +1,3 @@
-// Get All Posts
-// Get Post By Id
-// Create Post
-// Update Post
-// Delete Post By Id
-// Search In Posts
-
 import express, { Request, Response } from 'express';
 
 import { PrismaClient } from '@prisma/client';
