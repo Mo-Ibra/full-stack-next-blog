@@ -11,12 +11,20 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  password String
-  isAdmin Boolean @default(false)
-  token String? @db.Text
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  isAdmin    Boolean  @default(false)
+  token      String?  @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String   @db.MediumText
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
 }
