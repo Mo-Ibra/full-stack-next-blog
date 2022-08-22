@@ -142,8 +142,38 @@ Router.put('/:id', [isAuth, JoiMiddleWareValidator.body(articleSchema)], async (
  * @access User(Auth - Same)
 */
 
-Router.delete('/', (req: Request, res: Response) => {
+Router.delete('/:id', [isAuth], async (req: Request, res: Response) => {
 
+    const id: number = Number(req.params.id);
+
+    try {
+
+        const getArticle = await prisma.article.findUnique({
+            where: {
+                id,
+            }
+        });
+
+        if (!getArticle) {
+            return res.status(404).json({ status: 404, message: `Article with ID ${id} not found!` });
+        }
+
+        if (getArticle.authorId !== req.id) {
+            console.log(getArticle.authorId, req.id);
+            return res.status(403).json({ message: "You can't delete this article." });
+        }
+
+        const deletedArticle = await prisma.article.delete({
+            where: {
+                id,
+            }
+        });
+
+        res.status(200).json({ status: 200, message: "Article has been deleted", article: deletedArticle });
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 export default Router;
