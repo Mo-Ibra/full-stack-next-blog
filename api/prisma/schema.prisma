@@ -25,6 +25,19 @@ model Category {
   id          Int      @id @default(autoincrement())
   name        String
   description String   @db.MediumText
+  articles Articles[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+}
+
+model Articles {
+  id          Int      @id @default(autoincrement())
+  slug        String
+  title       String
+  description String   @db.MediumText
+  content     String   @db.Text
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
 }
