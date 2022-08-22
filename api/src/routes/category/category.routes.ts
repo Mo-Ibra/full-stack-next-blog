@@ -21,7 +21,7 @@ const Router = express.Router();
  */
 Router.get('/', async (req: Request, res: Response) => {
 
-    const categories = await prisma.category.findMany({});
+    const categories = await prisma.category.findMany();
 
     res.status(200).json({ status: 200, categories });
 });

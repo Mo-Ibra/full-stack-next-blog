@@ -25,12 +25,12 @@ model Category {
   id          Int      @id @default(autoincrement())
   name        String
   description String   @db.MediumText
-  articles Articles[]
+  articles Article[]
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
 }
 
-model Articles {
+model Article {
   id          Int      @id @default(autoincrement())
   slug        String
   title       String
