@@ -38,7 +38,7 @@ Router.get('/', [isAdmin], async (req: Request, res: Response) => {
  * @access Anyone
 */
 Router.get('/:id', async (req: Request, res: Response) => {
-    
+
     const id: number = Number(req.params.id);
 
     try {
@@ -66,7 +66,7 @@ Router.get('/:id', async (req: Request, res: Response) => {
  * @access Auth
 */
 Router.post('/', [isAuth, JoiMiddleWareValidator.body(commentSchema)], async (req: Request, res: Response) => {
-    
+
     const { content, articleId } = req.body;
 
     try {
@@ -79,12 +79,100 @@ Router.post('/', [isAuth, JoiMiddleWareValidator.body(commentSchema)], async (re
             }
         });
 
-        res.status(201).json({ status: 201, comment: createdComment });
+        res.status(201).json({ status: 201, message: "Comment has been created", comment: createdComment });
 
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err);
     }
 });
 
+/**
+ * Update Comment By ID
+ * 
+ * @access Auth (Same)
+*/
+
+Router.put('/:id', [isAuth], async (req: Request, res: Response) => {
+
+    const id: number = Number(req.params.id);
+
+    const { content } = req.body;
+
+    if (!content) {
+        return res.status(500).json({ status: 500, message: "You must type content!" });
+    }
+
+    try {
+
+        const getComment = await prisma.comment.findUnique({
+            where: {
+                id,
+            }
+        });
+
+        if (!getComment) {
+            return res.status(404).json({ status: 404, message: `Comment with ${id} Not Found!` });
+        }
+        
+        // if (getComment.authorId !== req.id && !req.isAdmin) {
+
+        if (getComment.authorId !== req.id) {
+            return res.status(403).json({ status: 403, message: "You can't Access Here" });
+        }
+        
+        const updatedComment = await prisma.comment.update({
+            where: {
+                id,
+            },
+            data: {
+                content,
+            }
+        });
+
+        res.status(200).json({ status: 200, message: "Comment has been updated", comment: updatedComment, })
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+/**
+ * Delete Comment By ID
+ * 
+ * @access Auth (Same)
+*/
+
+Router.delete('/:id', [isAuth], async (req: Request, res: Response) => {
+    
+    const id: number = Number(req.params.id);
+    
+    try {
+
+        const getComment = await prisma.comment.findUnique({
+            where: {
+                id,
+            }
+        });
+
+        if (!getComment) {
+            return res.status(404).json({ status: 404, message: `Comment with ${id} Not Found!` });
+        }
+
+        if (getComment.authorId !== req.id) {
+            return res.status(403).json({ status: 403, message: "You can't Access Here" });
+        }
+
+        const deletedComment = await prisma.comment.delete({
+            where: {
+                id,
+            }
+        });
+
+        res.status(200).json({ status: 200, message: "Comment has been deleted", comment: deletedComment });
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 export default Router;
