@@ -3,6 +3,7 @@ import express, { Express, Request, Response } from 'express';
 import authRoutes from './routes/auth/auth.routes';
 import categoryRoutes from './routes/category/category.routes';
 import articleRoutes from './routes/article/article.routes';
+import commentRoutes from './routes/comment/comment.routes';
 
 import cors from 'cors';
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/articles', articleRoutes);
+app.use('/api/comments', commentRoutes);
 
 // Server
 app.listen(PORT, (): void => console.log(`Application is works on Port ${PORT}`));

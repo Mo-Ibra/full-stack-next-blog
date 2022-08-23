@@ -20,7 +20,7 @@ model User {
   articles   Article[]
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
-  Comment    Comment[]
+  comments    Comment[]
 }
 
 model Category {
@@ -44,7 +44,7 @@ model Article {
   authorId    Int
   created_at  DateTime  @default(now())
   updated_at  DateTime  @default(now())
-  Comment     Comment[]
+  comments     Comment[]
 }
 
 model Comment {

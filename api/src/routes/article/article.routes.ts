@@ -20,7 +20,11 @@ const Router = express.Router();
  * @access Anyone
 */
 Router.get('/', async (req: Request, res: Response) => {
-    const articles = await prisma.article.findMany();
+    const articles = await prisma.article.findMany({
+        include: {
+            comments: true,
+        }
+    });
     res.status(200).json({ status: 200, articles });
 });
 
@@ -38,6 +42,9 @@ Router.get('/:id', async (req: Request, res: Response) => {
         const article = await prisma.article.findUnique({
             where: {
                 id,
+            },
+            include: {
+                comments: true,
             }
         });
 
@@ -68,7 +75,10 @@ Router.get('/search/:title', async (req: Request, res: Response) => {
             where: {
                 title: {
                     contains: searchTitle,
-                }
+                },
+            },
+            include: {
+                comments: true,
             }
         });
 
