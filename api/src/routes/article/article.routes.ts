@@ -53,6 +53,33 @@ Router.get('/:id', async (req: Request, res: Response) => {
 });
 
 /**
+ * Search In Articles
+ * 
+ * @access Anyone
+*/
+
+Router.get('/search/:title', async (req: Request, res: Response) => {
+
+    const searchTitle = req.params.title;
+
+    try {
+
+        const articles = await prisma.article.findMany({
+            where: {
+                title: {
+                    contains: searchTitle,
+                }
+            }
+        });
+
+        res.status(200).json({status: 200, articles});
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+/**
  * Create New Article
  * 
  * @access User(Auth).
