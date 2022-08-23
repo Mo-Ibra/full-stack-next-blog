@@ -20,6 +20,7 @@ model User {
   articles   Article[]
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
+  Comment    Comment[]
 }
 
 model Category {
@@ -32,15 +33,25 @@ model Category {
 }
 
 model Article {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   slug        String
   title       String
-  description String   @db.MediumText
-  content     String   @db.Text
-  category    Category @relation(fields: [categoryId], references: [id])
+  description String    @db.MediumText
+  content     String    @db.Text
+  category    Category  @relation(fields: [categoryId], references: [id])
   categoryId  Int
-  author      User     @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id])
   authorId    Int
-  created_at  DateTime @default(now())
-  updated_at  DateTime @default(now())
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now())
+  Comment     Comment[]
+}
+
+model Comment {
+  id        Int     @id @default(autoincrement())
+  content   String  @db.Text
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId Int
+  author    User    @relation(fields: [authorId], references: [id])
+  authorId  Int
 }
