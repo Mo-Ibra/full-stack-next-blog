@@ -26,7 +26,7 @@ const Login = ({ data }: LoginProps) => {
 
     return (
         <>
-            <Navbar data={data} />
+            <Navbar data={data} token="" />
             <LoginForm />
         </>
     )

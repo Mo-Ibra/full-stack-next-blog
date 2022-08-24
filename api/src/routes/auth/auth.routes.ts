@@ -44,6 +44,7 @@ Router.post('/register', [validator(registerSchema)], async (req: Request, res: 
 });
 
 Router.post('/login', validator(loginSchema), async (req: Request, res: Response) => {
+    
     try {
 
         const { email, password } = req.body;

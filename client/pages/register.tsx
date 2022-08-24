@@ -26,7 +26,7 @@ const Register = ({ data }: RegisterProps) => {
 
     return (
         <>
-            <Navbar data={data} />
+            <Navbar data={data} token="" />
             <RegisterForm />
         </>
     )
