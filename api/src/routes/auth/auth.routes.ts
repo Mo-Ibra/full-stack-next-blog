@@ -4,8 +4,6 @@ import { PrismaClient } from '@prisma/client';
 
 import bcrypt from 'bcrypt';
 
-import { createValidator } from 'express-joi-validation';
-
 import { loginSchema, registerSchema } from '../../validation/auth/auth.schema';
 
 import jwt from 'jsonwebtoken';
@@ -13,15 +11,16 @@ import jwt from 'jsonwebtoken';
 import isAuth from '../../middleware/auth/isAuth.middleware';
 
 import isAdmin from '../../middleware/auth/isAdmin.middleware';
+
 import { TOKEN_EXPIRES_TIME, TOKEN_SECRET_KEY } from '../../constants/constants';
+
+import validator from '../../middleware/validation/validator.middleware';
 
 const prisma = new PrismaClient();
 
 const Router = express.Router();
 
-const JoiMiddleWareValidator = createValidator();
-
-Router.post('/register', JoiMiddleWareValidator.body(registerSchema), async (req: Request, res: Response) => {
+Router.post('/register', [validator(registerSchema)], async (req: Request, res: Response) => {
     try {
 
         const { name, email, password } = req.body;
@@ -44,7 +43,7 @@ Router.post('/register', JoiMiddleWareValidator.body(registerSchema), async (req
     }
 });
 
-Router.post('/login', JoiMiddleWareValidator.body(loginSchema), async (req: Request, res: Response) => {
+Router.post('/login', validator(loginSchema), async (req: Request, res: Response) => {
     try {
 
         const { email, password } = req.body;
