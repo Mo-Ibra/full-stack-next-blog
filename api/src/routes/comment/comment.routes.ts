@@ -116,7 +116,7 @@ Router.put('/:id', [isAuth], async (req: Request, res: Response) => {
         
         // if (getComment.authorId !== req.id && !req.isAdmin) {
 
-        if (getComment.authorId !== req.id) {
+        if (getComment.authorId !== req.id && !req.isAdmin) {
             return res.status(403).json({ status: 403, message: "You can't Access Here" });
         }
         
@@ -158,7 +158,7 @@ Router.delete('/:id', [isAuth], async (req: Request, res: Response) => {
             return res.status(404).json({ status: 404, message: `Comment with ${id} Not Found!` });
         }
 
-        if (getComment.authorId !== req.id) {
+        if (getComment.authorId !== req.id && !req.isAdmin) {
             return res.status(403).json({ status: 403, message: "You can't Access Here" });
         }
 

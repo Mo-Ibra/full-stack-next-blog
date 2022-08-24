@@ -142,7 +142,7 @@ Router.put('/:id', [isAuth, JoiMiddleWareValidator.body(articleSchema)], async (
             return res.status(404).json({ status: 404, message: "Article not found!" });
         }
 
-        if (getArticle.authorId !== req.id) {
+        if (getArticle.authorId !== req.id && !req.isAdmin) {
             return res.status(403).json({ message: "You can't update this article." });
         }
 
@@ -188,7 +188,7 @@ Router.delete('/:id', [isAuth], async (req: Request, res: Response) => {
             return res.status(404).json({ status: 404, message: `Article with ID ${id} not found!` });
         }
 
-        if (getArticle.authorId !== req.id) {
+        if (getArticle.authorId !== req.id && !req.isAdmin) {
             console.log(getArticle.authorId, req.id);
             return res.status(403).json({ message: "You can't delete this article." });
         }
