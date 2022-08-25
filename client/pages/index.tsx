@@ -14,9 +14,13 @@ export type DataTypes = {
       isAdmin?: boolean;
   },
   token: string;
+  articles: object;
 }
 
-const Home = ({ data, token }: DataTypes) => {
+const Home = ({ data, token, articles }: DataTypes) => {
+
+  console.log(articles);
+
   return (
     <>
       <Navbar data={data} token={token}/>

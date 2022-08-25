@@ -1,4 +1,4 @@
-const URL = "http://localhost:8000/api";
+export const URL = "http://localhost:8000/api";
 
 type LoginTypes = {
     email: string;

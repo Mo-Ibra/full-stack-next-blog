@@ -2,14 +2,22 @@ import Link from "next/link";
 
 import Router from "next/router";
 
-import { DataTypes } from "../../pages";
-
 import { logout } from "../../services/auth.services";
+
+export type DataTypes = {
+    data: {
+        status: number,
+        name?: string;
+        email?: string;
+        isAdmin?: boolean;
+    },
+    token: string;
+}
 
 const Navbar = ({ data, token }: DataTypes) => {
 
     const logoutHandler = () => {
-
+        
         const logoutAPI = logout(token);
 
         logoutAPI.then(data => {
@@ -24,7 +32,9 @@ const Navbar = ({ data, token }: DataTypes) => {
             <div className="container mx-auto px-10">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2>Next BLOG</h2>
+                        <Link href="/">
+                            <h2 className="font-bold text-gray-800 cursor-pointer">Next BLOG</h2>
+                        </Link>
                     </div>
                     <div>
                         {

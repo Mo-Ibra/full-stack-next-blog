@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Router from "next/router";
 import { useState } from "react";
 import { login } from "../../services/auth.services";
@@ -16,6 +17,8 @@ const LoginForm = () => {
 
             login({ email: data.email, password: data.password }).then(data => {
                 
+                console.log(data);
+
                 if (data.status === 200) {
                     Router.push('/');
                 }
@@ -47,6 +50,7 @@ const LoginForm = () => {
                         onChange={(e) => setData({ ...data, password: e.target.value })}
                         className="block w-1/4 mx-auto p-2 border border-slate-200 outline-none my-5"
                     />
+                    <p className="block w-1/4 mx-auto p-2 my-5">Create New Account! <Link href="/register"><span className="text-blue-500 font-bold cursor-pointer">Register</span></Link></p>
                     <button onClick={handleSubmit} className="block w-1/4 mx-auto p-2 bg-blue-500 text-white rounded-md">Login</button>
                 </form>
             </div>
